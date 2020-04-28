@@ -5,4 +5,4 @@ apt-get upgrade -y
 
 sh bluetoothLibs.sh
 
-sh cronJobService.sh
+# sh cronJobService.sh

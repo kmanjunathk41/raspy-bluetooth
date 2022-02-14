@@ -35,7 +35,7 @@ advertise_service( server_sock, "Raspy",
 #                   protocols = [ OBEX_UUID ] 
                     )
 
-def ssid_discovered():
+def ssid_available():
     Cells = Cell.all('wlan0')
     wifi_info = 'Found ssid : \n'
     for current in range(len(Cells)):
@@ -44,7 +44,7 @@ def ssid_discovered():
     print wifi_info
     return wifi_info
 
-def isWiFiConnected():
+def isWiFi():
 	ps = subprocess.Popen(['iwgetid'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 	try:
 		output = subprocess.check_output(('grep', 'ESSID'), stdin=ps.stdout)
@@ -63,11 +63,11 @@ while True:
 			if len(data) == 0: break
 			if "listSSID" in data:
 				print "received [%s]" % data
-				client_sock.send(ssid_discovered())
-			elif "cmpRkKey123-checkConnection" in data:
+				client_sock.send(ssid_available())
+			elif "checkConnection" in data:
 				print "received [%s]" % data
 
-				if isWiFiConnected():
+				if isWiFi():
 					conn = httplib.HTTPConnection("www.google.com", timeout=5)
 					try:
 						conn.request("HEAD", "/")
@@ -77,7 +77,7 @@ while True:
 				else:
 					client_sock.send("WIFI_NOT_AVAILABLE\i")
 			else:
-				client_sock.send("key NF updated!!!")
+				client_sock.send("KNF!!!")
 				print "Key not found"
 		
 	except IOError:
